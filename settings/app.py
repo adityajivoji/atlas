@@ -6,6 +6,7 @@ from pydantic_settings import BaseSettings, NoDecode
 
 class AppSettings(BaseSettings):
     CORS_ALLOWED_ORIGINS: Annotated[list[str], NoDecode] = [
+        "http://localhost",
         "http://localhost:4200",
         "http://localhost:8000",
         "http://localhost:8080",

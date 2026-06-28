@@ -1,10 +1,17 @@
+import os
 import shutil
+import tempfile
 from pathlib import Path
 from uuid import uuid4
 
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+
+os.environ.setdefault("POSTGRES_DB_URL", "postgresql+asyncpg://atlas:atlas_dev_password@localhost:5432/atlas")
+os.environ.setdefault("POSTGRES_MIGRATION_URL", "postgresql+psycopg2://atlas:atlas_dev_password@localhost:5432/atlas")
+os.environ.setdefault("JWT_ALGORITHM", "RS256")
+os.environ.setdefault("ALLOWED_HOSTS", "testserver,localhost,127.0.0.1")
 
 import routers
 import services
@@ -13,7 +20,7 @@ import utils
 
 @pytest.fixture(autouse=True)
 def configure_auth_settings(monkeypatch):
-    test_root = Path(r"C:\Users\Asus\.codex\memories\auth-tests-root")
+    test_root = Path(tempfile.gettempdir()) / "atlas-auth-tests"
     test_root.mkdir(parents=True, exist_ok=True)
     base_dir = test_root / f"case-{uuid4().hex}"
     base_dir.mkdir(parents=True, exist_ok=False)
